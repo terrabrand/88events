@@ -1,22 +1,12 @@
-# FlyonUI Laravel Starter Kit
+# 88events
 
-This starter kit is based on [FlyonUI](https://flyonui.com).
+This project is based on the FlyonUI Laravel Starter Kit, tailored for event management and promotion.
 
-We decided to merge our [LaravelDaily/starter-kit](https://github.com/LaravelDaily/starter-kit) with FlyonUI components.
-
-As a result, you get full **simple** Laravel Auth (*login, register, forget password, profile*), styled as FlyonUI.
-
-![](https://laraveldaily.com/uploads/2025/12/flyonui-starter-kit-profile.png)
-
-![](https://laraveldaily.com/uploads/2025/12/flyonui-starter-kit-login.png)
-
-The main point is no React/Vue/Livewire required. Only Blade and Tailwind.
-
-Also, you're getting an example table/form with two-level menu on the sidebar to manage Users.
-
-![](https://laraveldaily.com/uploads/2025/12/flyonui-starter-kit-users-list.png)
-
-![](https://laraveldaily.com/uploads/2025/12/flyonui-starter-kit-user-edit.png)
+## Features
+- **Dynamic Categories**: Manage event categories and icons from the admin panel.
+- **Featured Slideshow**: Admin-managed hero section with featured events and custom messages.
+- **Attendee Dashboard**: Redesigned, visual dashboard for event attendees and promoters.
+- **Public Frontend**: Dedicated public pages for categories and event details.
 
 ---
 
