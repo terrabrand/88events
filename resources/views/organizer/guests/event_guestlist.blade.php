@@ -107,56 +107,71 @@
     </div>
 
     <!-- Add Quick Guest Modal -->
-    <dialog id="add_event_guest_modal" class="modal">
-        <div class="modal-box max-w-md border border-border shadow-2xl">
-            <div class="mb-6">
-                <h3 class="font-bold text-2xl text-foreground">Quick Add Guest</h3>
-                <p class="text-sm text-muted-foreground mt-1">Guest will be added to this event and your pool.</p>
+    <dialog id="add_event_guest_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+        <form method="dialog" class="fixed inset-0 outline-none w-full h-full cursor-pointer" tabindex="-1"></form>
+        <div class="modal-box w-full max-w-md bg-card text-card-foreground border border-border shadow-2xl rounded-2xl p-6 relative z-10 mx-4" onclick="event.stopPropagation()">
+            <div class="mb-6 flex justify-between items-start">
+                <div>
+                    <h3 class="font-black text-2xl text-foreground tracking-tight">Quick Add Guest</h3>
+                    <p class="text-sm text-muted-foreground mt-1">Guest will be added to this event and your pool.</p>
+                </div>
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost text-muted-foreground hover:text-foreground hover:bg-muted transition-colors -mr-2 -mt-2">
+                        <span class="icon-[tabler--x] size-5"></span>
+                    </button>
+                </form>
             </div>
             
             <form action="{{ route('organizer.guests.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <input type="hidden" name="event_id" value="{{ $event->id }}">
                 <div class="space-y-2">
-                    <label class="text-sm font-semibold px-1">Full Name</label>
-                    <input type="text" name="name" class="input input-bordered w-full h-11 shadow-sm focus:ring-2 focus:ring-primary/20" placeholder="e.g. John Doe" required>
+                    <label class="text-sm font-bold text-foreground px-1">Full Name</label>
+                    <input type="text" name="name" class="input input-bordered w-full h-11 bg-input text-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary border-border" placeholder="e.g. John Doe" required>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-2">
-                        <label class="text-sm font-semibold px-1">Email</label>
-                        <input type="email" name="email" class="input input-bordered w-full h-11 shadow-sm focus:ring-2 focus:ring-primary/20" placeholder="john@example.com">
+                        <label class="text-sm font-bold text-foreground px-1">Email</label>
+                        <input type="email" name="email" class="input input-bordered w-full h-11 bg-input text-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary border-border" placeholder="john@example.com">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-semibold px-1">Phone</label>
-                        <input type="text" name="phone" class="input input-bordered w-full h-11 shadow-sm focus:ring-2 focus:ring-primary/20" placeholder="+123...">
+                        <label class="text-sm font-bold text-foreground px-1">Phone</label>
+                        <input type="text" name="phone" class="input input-bordered w-full h-11 bg-input text-foreground focus:ring-2 focus:ring-primary/20 focus:border-primary border-border" placeholder="+123...">
                     </div>
                 </div>
-                <div class="modal-action gap-3">
-                    <button type="button" onclick="window.add_event_guest_modal.close()" class="btn btn-ghost flex-1">Cancel</button>
-                    <button type="submit" class="btn btn-primary flex-1 shadow-lg shadow-primary/20">Invite Guest</button>
+                <div class="modal-action gap-3 mt-8">
+                    <button type="button" onclick="window.add_event_guest_modal.close()" class="btn btn-ghost hover:bg-muted text-muted-foreground hover:text-foreground flex-1">Cancel</button>
+                    <button type="submit" class="btn btn-primary text-primary-foreground flex-1 shadow-lg shadow-primary/20 font-bold">Invite Guest</button>
                 </div>
             </form>
         </div>
-        <form method="dialog" class="modal-backdrop"><button>close</button></form>
     </dialog>
 
     <!-- Import Modal -->
-    <dialog id="import_guests_modal" class="modal">
-        <div class="modal-box max-w-2xl border border-border shadow-2xl">
-            <div class="mb-6">
-                <h3 class="font-bold text-2xl text-foreground text-center">Import from Pool</h3>
-                <p class="text-sm text-muted-foreground text-center mt-1">Select previous guests to join this event.</p>
+    <dialog id="import_guests_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+        <form method="dialog" class="fixed inset-0 outline-none w-full h-full cursor-pointer" tabindex="-1"></form>
+        <div class="modal-box w-full max-w-2xl bg-card text-card-foreground border border-border shadow-2xl rounded-2xl p-6 relative z-10 mx-4" onclick="event.stopPropagation()">
+            <div class="mb-6 flex justify-between items-start">
+                <div>
+                    <h3 class="font-black text-2xl text-foreground tracking-tight text-center">Import from Pool</h3>
+                    <p class="text-sm text-muted-foreground text-center mt-1">Select previous guests to join this event.</p>
+                </div>
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost text-muted-foreground hover:text-foreground hover:bg-muted transition-colors -mr-2 -mt-2">
+                        <span class="icon-[tabler--x] size-5"></span>
+                    </button>
+                </form>
             </div>
             
             <form action="{{ route('organizer.guests.import', $event) }}" method="POST" class="space-y-6">
                 @csrf
-                <div class="max-h-[350px] overflow-y-auto border border-border rounded-xl shadow-inner bg-muted/5">
+                <div class="max-h-[350px] overflow-y-auto border border-border rounded-xl shadow-inner bg-muted/5 custom-scrollbar">
                     <table class="w-full text-sm">
                         <thead class="sticky top-0 bg-background border-b border-border shadow-sm">
                             <tr>
-                                <th class="p-3 text-left w-12 text-center">#</th>
-                                <th class="p-3 text-left font-semibold text-muted-foreground uppercase text-xs">Name</th>
-                                <th class="p-3 text-left font-semibold text-muted-foreground uppercase text-xs">Contact</th>
+                                <th class="p-4 text-center w-16">#</th>
+                                <th class="p-4 text-left font-bold text-muted-foreground uppercase text-xs">Name</th>
+                                <th class="p-4 text-left font-bold text-muted-foreground uppercase text-xs">Contact</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border/50">
@@ -170,22 +185,26 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="p-12 text-center text-muted-foreground italic">No other guests in your pool to import.</td>
+                                    <td colspan="3" class="p-12 text-center text-muted-foreground italic">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <span class="icon-[tabler--users-minus] size-8 text-muted-foreground/30"></span>
+                                            <span>No other guests in your pool to import.</span>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                <div class="modal-action gap-3">
-                    <button type="button" onclick="window.import_guests_modal.close()" class="btn btn-ghost flex-1">Cancel</button>
-                    <button type="submit" class="btn btn-primary flex-1 shadow-lg shadow-primary/20" @if($previousGuests->isEmpty()) disabled @endif>
+                <div class="modal-action gap-3 mt-8">
+                    <button type="button" onclick="window.import_guests_modal.close()" class="btn btn-ghost hover:bg-muted text-muted-foreground hover:text-foreground flex-1">Cancel</button>
+                    <button type="submit" class="btn btn-primary text-primary-foreground flex-1 shadow-lg shadow-primary/20 font-bold" @if($previousGuests->isEmpty()) disabled @endif>
                         Import Selected
                     </button>
                 </div>
             </form>
         </div>
-        <form method="dialog" class="modal-backdrop"><button>close</button></form>
     </dialog>
 </div>
 @endsection

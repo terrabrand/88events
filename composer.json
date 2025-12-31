@@ -14,6 +14,7 @@
         "drewm/mailchimp-api": "*",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.2",
+        "laravel/socialite": "^5.24",
         "laravel/tinker": "^2.10.1",
         "mailchimp/marketing": "*",
         "simplesoftwareio/simple-qrcode": "^4.2",

@@ -21,6 +21,8 @@ class EventController extends Controller
         if (Auth::user()->hasRole('attendee')) {
             $events = Event::where('status', 'published')
                 ->where('start_date', '>=', now())
+                ->withPromotionStatus()
+                ->orderByDesc('is_promoted')
                 ->orderBy('start_date', 'asc')
                 ->paginate(12);
         } else {
@@ -68,14 +70,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        $event->load('venue');
-        $occupiedSeats = $event->tickets()
-            ->where('status', '!=', 'cancelled')
-            ->whereNotNull('seat_number')
-            ->pluck('seat_number')
-            ->toArray();
-
-        return view('events.show', compact('event', 'occupiedSeats'));
+        return redirect()->route('events.show.public', $event->slug);
     }
 
     public function showPublic(Event $event)

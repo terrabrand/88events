@@ -3,32 +3,18 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $featuredEvents = \App\Models\Event::where('status', 'published')
-        ->where('is_featured', true)
-        ->latest()
-        ->take(5)
-        ->get();
-    
-    $latestEvents = \App\Models\Event::where('status', 'published')
-        ->latest()
-        ->take(8)
-        ->get();
-
-    $categories = \App\Models\Category::all();
-    $featuredItems = \App\Models\FeaturedItem::with('event')->where('is_active', true)->orderBy('sort_order')->get();
-
-    return view('welcome', compact('featuredEvents', 'latestEvents', 'categories', 'featuredItems'));
-})->name('home');
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');
 
 Route::get('/category/{category:slug}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
 Route::get('/event/{event:slug}', [\App\Http\Controllers\EventController::class, 'showPublic'])->name('events.show.public');
+Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'showPublic'])->name('events.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('users', UserController::class);
-    Route::resource('events', \App\Http\Controllers\EventController::class);
+    Route::resource('events', \App\Http\Controllers\EventController::class)->except(['show']);
     
     // Ticket Management (Organizer)
     Route::post('events/{event}/ticket-types', [\App\Http\Controllers\TicketTypeController::class, 'store'])->name('ticket-types.store');
@@ -64,6 +50,13 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Admin Routes
+    // Support Ticket System
+    Route::get('support', [\App\Http\Controllers\SupportTicketController::class, 'index'])->name('support.index');
+    Route::get('support/create', [\App\Http\Controllers\SupportTicketController::class, 'create'])->name('support.create');
+    Route::post('support', [\App\Http\Controllers\SupportTicketController::class, 'store'])->name('support.store');
+    Route::get('support/{ticket}', [\App\Http\Controllers\SupportTicketController::class, 'show'])->name('support.show');
+    Route::post('support/{ticket}/reply', [\App\Http\Controllers\SupportTicketController::class, 'reply'])->name('support.reply');
+
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
         
@@ -94,7 +87,17 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'toggleApproval'])->name('reviews.toggle');
         Route::delete('/reviews/{review}', [\App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
 
+        Route::get('/support', [\App\Http\Controllers\Admin\SupportTicketController::class, 'index'])->name('support.index');
+        Route::get('/support/{ticket}', [\App\Http\Controllers\Admin\SupportTicketController::class, 'show'])->name('support.show');
+        Route::patch('/support/{ticket}/status', [\App\Http\Controllers\Admin\SupportTicketController::class, 'updateStatus'])->name('support.status');
+        Route::post('/support/{ticket}/reply', [\App\Http\Controllers\Admin\SupportTicketController::class, 'reply'])->name('support.reply');
+
         Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class);
+
+        // Ad Management
+        Route::resource('ad-packages', \App\Http\Controllers\Admin\AdPackageController::class)->except(['show', 'create', 'edit']);
+        Route::get('promotions', [\App\Http\Controllers\Admin\PromotionController::class, 'index'])->name('promotions.index');
+        Route::patch('promotions/{promotion}/status', [\App\Http\Controllers\Admin\PromotionController::class, 'updateStatus'])->name('promotions.status');
     });
 
     // Organizer Routes
@@ -123,7 +126,18 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('venues', \App\Http\Controllers\Organizer\VenueController::class);
         Route::post('/venues/{venue}/pull', [\App\Http\Controllers\Organizer\VenueController::class, 'pull'])->name('venues.pull');
+
+        // Promotion & Credits
+        Route::resource('promotions', \App\Http\Controllers\Organizer\PromotionController::class);
+        Route::get('credits', [\App\Http\Controllers\Organizer\CreditController::class, 'index'])->name('credits.index');
+        Route::post('credits/deposit', [\App\Http\Controllers\Organizer\CreditController::class, 'deposit'])->name('credits.deposit');
     });
 });
 
 require __DIR__.'/auth.php';
+
+// Social Login
+Route::get('auth/{provider}/redirect', [App\Http\Controllers\Auth\SocialiteController::class, 'redirectToProvider'])->name('social.redirect');
+Route::get('auth/{provider}/callback', [App\Http\Controllers\Auth\SocialiteController::class, 'handleProviderCallback'])->name('social.callback');
+
+// Search Route

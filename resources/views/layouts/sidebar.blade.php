@@ -25,6 +25,11 @@
                         <span class="icon-[lucide--layout-dashboard] size-5"></span>
                         Dashboard
                     </a>
+
+                    <a href="{{ route('support.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('support.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                        <span class="icon-[lucide--life-buoy] size-5"></span>
+                        Support
+                    </a>
                     
                     @role('organizer|admin')
                         <a href="{{ route('events.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('events.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
@@ -51,6 +56,17 @@
                             <span class="icon-[lucide--landmark] size-5"></span>
                             My Venues
                         </a>
+                        
+                        <a href="{{ route('organizer.promotions.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('organizer.promotions.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                            <span class="icon-[lucide--megaphone] size-5"></span>
+                            Ad Promotions
+                        </a>
+
+                        <a href="{{ route('organizer.credits.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('organizer.credits.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                            <span class="icon-[lucide--wallet] size-5"></span>
+                            My Wallet
+                        </a>
+
                         @role('admin')
                             <a href="{{ route('admin.venues.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.venues.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
                                 <span class="icon-[lucide--landmark] size-5"></span>
@@ -94,9 +110,9 @@
                             Administration
                         </div>
 
-                        <a href="{{ route('admin.packages.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.packages.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                        <a href="{{ route('admin.ad-packages.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.ad-packages.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
                             <span class="icon-[lucide--package] size-5"></span>
-                            Subscription Plans
+                            Ad Packages
                         </a>
 
                         <a href="{{ route('admin.orders.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.orders.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
@@ -114,6 +130,11 @@
                             Featured Content
                         </a>
 
+                        <a href="{{ route('admin.promotions.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.promotions.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                            <span class="icon-[lucide--megaphone] size-5"></span>
+                            Ad Promotions
+                        </a>
+
                         <a href="{{ route('admin.reports.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.reports.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
                             <span class="icon-[lucide--flag] size-5"></span>
                             Reports
@@ -122,6 +143,11 @@
                         <a href="{{ route('admin.reviews.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.reviews.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
                             <span class="icon-[lucide--star] size-5"></span>
                             Reviews
+                        </a>
+
+                        <a href="{{ route('admin.support.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.support.index') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                            <span class="icon-[lucide--life-buoy] size-5"></span>
+                            Support Tickets
                         </a>
 
                         <!-- Settings Submenu -->

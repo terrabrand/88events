@@ -108,6 +108,46 @@
   * {
     @apply border-border;
   }
+
+  [x-cloak] {
+    display: none !important;
+  }
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 cursor-pointer;
+}
+
+@utility btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+@utility btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+}
+
+@utility btn-ghost {
+  @apply hover:bg-accent hover:text-accent-foreground;
+}
+
+@utility btn-outline {
+  @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
+}
+
+@utility btn-sm {
+  @apply h-9 rounded-md px-3 text-xs;
+}
+
+@utility btn-lg {
+  @apply h-11 rounded-md px-8 text-base;
+}
+
+@utility btn-circle {
+  @apply h-10 w-10 p-0 rounded-full;
+}
+
+@utility btn-square {
+  @apply h-10 w-10 p-0;
 }
 
 [data-theme='dark'] li:not(.menu-title, .menu-disabled)> :not(ul, .menu-title, .collapse, .accordion-content, .btn).menu-active {

@@ -78,8 +78,8 @@
         </div>
 
         <!-- Create Modal -->
-        <dialog id="add_category_modal" class="modal">
-            <div class="modal-box max-w-md border border-border shadow-2xl">
+        <dialog id="add_category_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+            <div class="modal-box max-w-md border border-border shadow-2xl relative z-10 bg-card text-card-foreground p-6 rounded-2xl" onclick="event.stopPropagation()">
                 <div class="mb-6">
                     <h3 class="font-bold text-2xl text-foreground">New Category</h3>
                     <p class="text-muted-foreground text-sm mt-1">Define a classification for your events.</p>
@@ -104,7 +104,7 @@
                         <textarea name="description" class="textarea textarea-bordered w-full min-h-[100px] focus:ring-2 focus:ring-primary/20" placeholder="Describe what kind of events belong here..."></textarea>
                     </div>
                     
-                    <div class="modal-action gap-3">
+                    <div class="modal-action gap-3 flex">
                         <button type="button" onclick="window.add_category_modal.close()" class="btn btn-ghost flex-1">
                             Cancel
                         </button>
@@ -114,14 +114,12 @@
                     </div>
                 </form>
             </div>
-            <form method="dialog" class="modal-backdrop">
-                <button>close</button>
-            </form>
+            <form method="dialog" class="fixed inset-0 w-full h-full cursor-pointer" onclick="window.add_category_modal.close()"></form>
         </dialog>
 
         <!-- Edit Modal -->
-        <dialog id="edit_category_modal" class="modal">
-            <div class="modal-box max-w-md border border-border shadow-2xl">
+        <dialog id="edit_category_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+            <div class="modal-box max-w-md border border-border shadow-2xl relative z-10 bg-card text-card-foreground p-6 rounded-2xl" onclick="event.stopPropagation()">
                 <div class="mb-6">
                     <h3 class="font-bold text-2xl text-foreground">Edit Category</h3>
                     <p class="text-muted-foreground text-sm mt-1">Update classification details.</p>
@@ -156,9 +154,7 @@
                     </div>
                 </form>
             </div>
-            <form method="dialog" class="modal-backdrop">
-                <button>close</button>
-            </form>
+            <form method="dialog" class="fixed inset-0 w-full h-full cursor-pointer" onclick="window.edit_category_modal.close()"></form>
         </dialog>
 
         @push('scripts')

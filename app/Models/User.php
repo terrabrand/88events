@@ -25,15 +25,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone',
-        'status',
-        'parent_id',
-        'profile_photo_path',
-        'referral_code',
+        'credits',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Get the attributes that should be hidden for serialization.
      *
      * @var list<string>
      */
@@ -82,6 +78,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'credits' => 'decimal:2',
         ];
     }
 
@@ -123,5 +120,61 @@ class User extends Authenticatable
             ->explode(' ')
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
+    }
+
+    public function sentTickets()
+    {
+        return $this->hasMany(SupportTicket::class, 'sender_id');
+    }
+
+    public function receivedTickets()
+    {
+        return $this->hasMany(SupportTicket::class, 'recipient_id');
+    }
+
+    public function supportMessages()
+    {
+        return $this->hasMany(SupportMessage::class);
+    }
+
+    /* Promotion System */
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'organizer_id');
+    }
+    
+    public function creditTransactions()
+    {
+        return $this->hasMany(CreditTransaction::class);
+    }
+
+    public function promotions()
+    {
+        return $this->hasMany(Promotion::class);
+    }
+
+    public function depositCredits(float $amount, string $description = 'Deposit')
+    {
+        $this->increment('credits', $amount);
+        $this->creditTransactions()->create([
+            'amount' => $amount,
+            'type' => 'purchase',
+            'description' => $description,
+        ]);
+    }
+
+    public function chargeCredits(float $amount, string $description)
+    {
+        if ($this->credits < $amount) {
+            throw new \Exception('Insufficient credits');
+        }
+
+        $this->decrement('credits', $amount);
+        $this->creditTransactions()->create([
+            'amount' => -$amount,
+            'type' => 'spend',
+            'description' => $description,
+        ]);
     }
 }

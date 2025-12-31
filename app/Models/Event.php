@@ -88,4 +88,36 @@ class Event extends Model
                     ->withPivot('status')
                     ->withTimestamps();
     }
+
+    public function promotions()
+    {
+        return $this->hasMany(Promotion::class);
+    }
+
+    public function activePromotion()
+    {
+        return $this->hasOne(Promotion::class)
+            ->where('status', 'active')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->latest();
+    }
+
+    public function scopePromoted($query)
+    {
+        return $query->whereHas('promotions', function ($q) {
+            $q->where('status', 'active')
+              ->where('start_date', '<=', now())
+              ->where('end_date', '>=', now());
+        });
+    }
+
+    public function scopeWithPromotionStatus($query)
+    {
+        return $query->withExists(['promotions as is_promoted' => function ($q) {
+            $q->where('status', 'active')
+              ->where('start_date', '<=', now())
+              ->where('end_date', '>=', now());
+        }]);
+    }
 }

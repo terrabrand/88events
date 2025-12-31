@@ -25,11 +25,27 @@ class RegistrationController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string', 'in:organizer,attendee'],
+            'phone' => ['nullable', 'string', 'max:255', 'unique:'.User::class],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered(($user = User::create($validated))));
+        $userData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+        ];
+
+        if (!empty($validated['phone'])) {
+            $userData['phone'] = $validated['phone'];
+        }
+
+        $user = User::create($userData);
+
+        $user->assignRole($validated['role']);
+
+        event(new Registered($user));
 
         Auth::login($user);
 

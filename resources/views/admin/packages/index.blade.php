@@ -62,14 +62,14 @@
     </div>
 
     <!-- Add Package Modal -->
-    <dialog id="add_package_modal" class="modal">
-        <div class="modal-box max-w-md">
+    <dialog id="add_package_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+        <div class="modal-box max-w-md bg-card text-card-foreground border border-border shadow-2xl relative z-10 p-6 rounded-2xl" onclick="event.stopPropagation()">
             <h3 class="font-bold text-lg mb-4">Add Subscription Plan</h3>
             <form action="{{ route('admin.packages.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div class="space-y-2">
                     <label class="text-sm font-medium">Plan Name</label>
-                    <input type="text" name="name" class="input input-bordered w-full" required>
+                    <input type="text" name="name" class="input input-bordered w-full h-10" required>
                 </div>
                 <div class="space-y-2">
                     <label class="text-sm font-medium">Description</label>
@@ -78,11 +78,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Price ($)</label>
-                        <input type="number" name="price" step="0.01" class="input input-bordered w-full" required>
+                        <input type="number" name="price" step="0.01" class="input input-bordered w-full h-10" required>
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Status</label>
-                        <select name="is_active" class="select select-bordered w-full">
+                        <select name="is_active" class="select select-bordered w-full h-10">
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
@@ -91,31 +91,32 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label class="text-sm font-medium">SMS Limit</label>
-                        <input type="number" name="sms_limit" class="input input-bordered w-full" required>
+                        <input type="number" name="sms_limit" class="input input-bordered w-full h-10" required>
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Email Limit</label>
-                        <input type="number" name="email_limit" class="input input-bordered w-full" required>
+                        <input type="number" name="email_limit" class="input input-bordered w-full h-10" required>
                     </div>
                 </div>
-                <div class="modal-action">
+                <div class="modal-action flex gap-2 justify-end mt-6">
                     <button type="button" class="btn btn-ghost" onclick="window.add_package_modal.close()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Create Plan</button>
                 </div>
             </form>
         </div>
+        <form method="dialog" class="fixed inset-0 w-full h-full cursor-pointer" onclick="window.add_package_modal.close()"></form>
     </dialog>
 
     <!-- Edit Package Modal -->
-    <dialog id="edit_package_modal" class="modal">
-        <div class="modal-box max-w-md">
+    <dialog id="edit_package_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+        <div class="modal-box max-w-md bg-card text-card-foreground border border-border shadow-2xl relative z-10 p-6 rounded-2xl" onclick="event.stopPropagation()">
             <h3 class="font-bold text-lg mb-4">Edit Subscription Plan</h3>
             <form id="edit_package_form" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
                 <div class="space-y-2">
                     <label class="text-sm font-medium">Plan Name</label>
-                    <input type="text" name="name" id="edit_name" class="input input-bordered w-full" required>
+                    <input type="text" name="name" id="edit_name" class="input input-bordered w-full h-10" required>
                 </div>
                 <div class="space-y-2">
                     <label class="text-sm font-medium">Description</label>
@@ -124,11 +125,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Price ($)</label>
-                        <input type="number" name="price" id="edit_price" step="0.01" class="input input-bordered w-full" required>
+                        <input type="number" name="price" id="edit_price" step="0.01" class="input input-bordered w-full h-10" required>
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Status</label>
-                        <select name="is_active" id="edit_active" class="select select-bordered w-full">
+                        <select name="is_active" id="edit_active" class="select select-bordered w-full h-10">
                             <option value="1">Active</option>
                             <option value="0">Inactive</option>
                         </select>
@@ -137,19 +138,20 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label class="text-sm font-medium">SMS Limit</label>
-                        <input type="number" name="sms_limit" id="edit_sms" class="input input-bordered w-full" required>
+                        <input type="number" name="sms_limit" id="edit_sms" class="input input-bordered w-full h-10" required>
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-medium">Email Limit</label>
-                        <input type="number" name="email_limit" id="edit_email" class="input input-bordered w-full" required>
+                        <input type="number" name="email_limit" id="edit_email" class="input input-bordered w-full h-10" required>
                     </div>
                 </div>
-                <div class="modal-action">
+                <div class="modal-action flex gap-2 justify-end mt-6">
                     <button type="button" class="btn btn-ghost" onclick="window.edit_package_modal.close()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update Plan</button>
                 </div>
             </form>
         </div>
+        <form method="dialog" class="fixed inset-0 w-full h-full cursor-pointer" onclick="window.edit_package_modal.close()"></form>
     </dialog>
 </div>
 

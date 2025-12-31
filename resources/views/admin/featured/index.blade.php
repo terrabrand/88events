@@ -107,8 +107,8 @@
     </div>
 
     {{-- Add Event Modal --}}
-    <dialog id="add_event_modal" class="modal">
-        <div class="modal-box max-w-md border border-border shadow-2xl">
+    <dialog id="add_event_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+        <div class="modal-box max-w-md bg-card text-card-foreground border border-border shadow-2xl relative z-10 p-6 rounded-2xl" onclick="event.stopPropagation()">
             <h3 class="font-black text-2xl mb-2">Feature an Event</h3>
             <p class="text-muted-foreground text-sm mb-6">Select an existing event to show on the hero section.</p>
             
@@ -118,7 +118,7 @@
                 
                 <div class="space-y-2">
                     <label class="text-sm font-bold px-1">Choose Event</label>
-                    <select name="event_id" class="select select-bordered w-full" required>
+                    <select name="event_id" class="select select-bordered w-full h-10" required>
                         <option value="" disabled selected>Select an event...</option>
                         @foreach($events as $event)
                             <option value="{{ $event->id }}">{{ $event->title }}</option>
@@ -131,18 +131,18 @@
                     <textarea name="description" class="textarea textarea-bordered w-full h-24" placeholder="If left blank, event description will be used..."></textarea>
                 </div>
 
-                <div class="modal-action">
+                <div class="modal-action flex gap-2 justify-end mt-6">
                     <button type="button" onclick="window.add_event_modal.close()" class="btn btn-ghost">Cancel</button>
                     <button type="submit" class="btn btn-primary shadow-lg shadow-primary/20">Add to Slideshow</button>
                 </div>
             </form>
         </div>
-        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+        <form method="dialog" class="fixed inset-0 w-full h-full cursor-pointer" onclick="window.add_event_modal.close()"></form>
     </dialog>
 
     {{-- Add Custom Modal --}}
-    <dialog id="add_custom_modal" class="modal">
-        <div class="modal-box max-w-lg border border-border shadow-2xl">
+    <dialog id="add_custom_modal" class="fixed inset-0 z-[999] w-screen h-screen max-w-none max-h-none m-0 p-0 bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-[2px] open:flex items-center justify-center">
+        <div class="modal-box max-w-lg bg-card text-card-foreground border border-border shadow-2xl relative z-10 p-6 rounded-2xl" onclick="event.stopPropagation()">
             <h3 class="font-black text-2xl mb-2">Add Custom Slide</h3>
             <p class="text-muted-foreground text-sm mb-6">Create a manual banner for announcements or promotions.</p>
             
@@ -152,7 +152,7 @@
                 
                 <div class="space-y-2">
                     <label class="text-sm font-bold px-1 text-foreground">Headline</label>
-                    <input type="text" name="title" class="input input-bordered w-full" placeholder="e.g. New Year Extravaganza" required>
+                    <input type="text" name="title" class="input input-bordered w-full h-10" placeholder="e.g. New Year Extravaganza" required>
                 </div>
 
                 <div class="space-y-2">
@@ -163,27 +163,27 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label class="text-sm font-bold px-1 text-foreground">Button Text</label>
-                        <input type="text" name="button_text" class="input input-bordered w-full" placeholder="e.g. Explore Now">
+                        <input type="text" name="button_text" class="input input-bordered w-full h-10" placeholder="e.g. Explore Now">
                     </div>
                     <div class="space-y-2">
                         <label class="text-sm font-bold px-1 text-foreground">Link URL</label>
-                        <input type="text" name="link_url" class="input input-bordered w-full" placeholder="e.g. /events/nye-2025" required>
+                        <input type="text" name="link_url" class="input input-bordered w-full h-10" placeholder="e.g. /events/nye-2025" required>
                     </div>
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-sm font-bold px-1 text-foreground">Background Image</label>
-                    <input type="file" name="image" class="file-input file-input-bordered w-full" accept="image/*" required>
+                    <input type="file" name="image" class="file-input file-input-bordered w-full h-10" accept="image/*" required>
                     <p class="text-[10px] text-muted-foreground px-1">Recommended size: 1920x800px</p>
                 </div>
 
-                <div class="modal-action">
+                <div class="modal-action flex gap-2 justify-end mt-6">
                     <button type="button" onclick="window.add_custom_modal.close()" class="btn btn-ghost">Cancel</button>
                     <button type="submit" class="btn btn-secondary shadow-lg shadow-secondary/20">Create Slide</button>
                 </div>
             </form>
         </div>
-        <form method="dialog" class="modal-backdrop"><button>close</button></form>
+        <form method="dialog" class="fixed inset-0 w-full h-full cursor-pointer" onclick="window.add_custom_modal.close()"></form>
     </dialog>
 </div>
 @endsection
