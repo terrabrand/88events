@@ -34,7 +34,10 @@ class SupportTicketController extends Controller
             $events = Event::where('status', 'published')->get();
         }
 
-        return view('support.create', compact('type', 'events'));
+        $subject = $request->input('subject');
+        $message = $request->input('message');
+
+        return view('support.create', compact('type', 'events', 'subject', 'message'));
     }
 
     public function store(Request $request)

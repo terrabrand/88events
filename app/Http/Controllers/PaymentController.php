@@ -156,13 +156,7 @@ class PaymentController extends Controller
         }
     }
 
-        if ($result['success']) {
-            // For mock gateway, we redirect to a success simulator
-            return redirect($result['redirect_url']);
-        }
 
-        return back()->with('error', 'Payment initiation failed: ' . $result['message']);
-    }
 
     public function success(Request $request)
     {

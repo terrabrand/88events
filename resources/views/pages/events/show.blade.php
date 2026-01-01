@@ -26,23 +26,47 @@
                 <h1 class="text-4xl md:text-5xl font-black text-foreground mb-6 leading-tight">{{ $event->title }}</h1>
                 
                 <div class="flex items-center gap-4 mb-8 pb-8 border-b border-border">
-                    <div class="avatar placeholder">
-                        <div class="bg-muted text-muted-foreground w-12 rounded-full flex items-center justify-center">
-                            <span class="text-xl font-bold">{{ substr($event->organizer->name, 0, 1) }}</span>
-                        </div>
-                    </div>
+                    <a href="{{ route('organizers.show', $event->organizer) }}" class="avatar placeholder group">
+                        @if($event->organizer->avatar)
+                            <div class="w-12 rounded-full overflow-hidden group-hover:opacity-80 transition-opacity">
+                                <img src="{{ asset('storage/' . $event->organizer->avatar) }}" alt="{{ $event->organizer->name }}" class="w-full h-full object-cover">
+                            </div>
+                        @else
+                            <div class="bg-muted text-muted-foreground w-12 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                                <span class="text-xl font-bold">{{ $event->organizer->initials() }}</span>
+                            </div>
+                        @endif
+                    </a>
                     <div>
-                        <div class="font-bold text-foreground">By {{ $event->organizer->name }}</div>
-                        <div class="text-sm text-muted-foreground">{{ number_format(rand(100, 5000)) }} followers</div>
+                        <div class="font-bold text-foreground">
+                            By <a href="{{ route('organizers.show', $event->organizer) }}" class="hover:text-primary transition-colors">{{ $event->organizer->name }}</a>
+                        </div>
+                        <div class="text-sm text-muted-foreground">{{ $event->organizer->followers_count }} followers</div>
                     </div>
-                    <button class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">Follow</button>
+                    
+                    @auth
+                        @if(Auth::id() !== $event->organizer->id)
+                            @if(Auth::user()->isFollowing($event->organizer))
+                                <form action="{{ route('organizers.unfollow', $event->organizer) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="rounded-full border border-input bg-background px-6 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all">Following</button>
+                                </form>
+                            @else
+                                <form action="{{ route('organizers.follow', $event->organizer) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">Follow</button>
+                                </form>
+                            @endif
+                        @endif
+                    @else
+                        <a href="{{ route('login') }}" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">Follow</a>
+                    @endauth
                 </div>
 
                 <section class="mb-12">
                      <h2 class="text-2xl font-bold mb-6 text-foreground">Overview</h2>
-                     <p class="text-lg text-muted-foreground italic mb-6">
-                        "{{ \Illuminate\Support\Str::limit($event->description, 100) }}"
-                     </p>
+                     
                      
                      <div class="prose prose-lg max-w-none text-muted-foreground">
                         {!! nl2br(e($event->description)) !!}
@@ -85,20 +109,45 @@
                 <section class="mb-12 pb-12 border-b border-border">
                     <h2 class="text-2xl font-bold mb-6 text-foreground">Organized by</h2>
                     <div class="bg-card text-card-foreground border border-border rounded-xl p-8 flex flex-col md:flex-row items-center gap-8 text-center md:text-left shadow-sm">
-                         <div class="avatar placeholder">
-                            <div class="bg-muted text-muted-foreground w-24 rounded-full flex items-center justify-center">
-                                <span class="text-4xl font-bold">{{ substr($event->organizer->name, 0, 1) }}</span>
-                            </div>
-                        </div>
+                         <a href="{{ route('organizers.show', $event->organizer) }}" class="avatar placeholder group">
+                            @if($event->organizer->avatar)
+                                <div class="size-20 rounded-full overflow-hidden group-hover:opacity-80 transition-opacity">
+                                    <img src="{{ asset('storage/' . $event->organizer->avatar) }}" alt="{{ $event->organizer->name }}" class="w-full h-full object-cover">
+                                </div>
+                            @else
+                                <div class="bg-muted text-muted-foreground size-20 rounded-full flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                                    <span class="text-3xl font-bold">{{ $event->organizer->initials() }}</span>
+                                </div>
+                            @endif
+                        </a>
                         <div class="flex-1">
-                            <h3 class="text-xl font-bold mb-1">{{ $event->organizer->name }}</h3>
+                            <h3 class="text-xl font-bold mb-1">
+                                <a href="{{ route('organizers.show', $event->organizer) }}" class="hover:text-primary transition-colors">{{ $event->organizer->name }}</a>
+                            </h3>
                             <div class="flex items-center justify-center md:justify-start gap-4 text-sm text-muted-foreground mb-6">
-                                <span>{{ number_format(rand(100, 5000)) }} Followers</span>
+                                <span>{{ $event->organizer->followers_count }} Followers</span>
                                 <span class="w-1 h-1 rounded-full bg-muted-foreground"></span>
-                                <span>{{ \App\Models\Event::where('organizer_id', $event->organizer_id)->count() }} Events</span>
+                                <span>{{ \App\Models\Event::where('organizer_id', $event->organizer_id)->where('status', 'published')->count() }} Events</span>
                             </div>
                             <div class="flex items-center justify-center md:justify-start gap-3">
-                                <button class="rounded-full bg-primary px-8 py-2 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all">Follow</button>
+                                @auth
+                                    @if(Auth::id() !== $event->organizer->id)
+                                        @if(Auth::user()->isFollowing($event->organizer))
+                                            <form action="{{ route('organizers.unfollow', $event->organizer) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-destructive hover:text-destructive-foreground hover:border-destructive transition-all">Following</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('organizers.follow', $event->organizer) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="rounded-full bg-primary px-8 py-2 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all">Follow</button>
+                                            </form>
+                                        @endif
+                                    @endif
+                                @else
+                                    <a href="{{ route('login') }}" class="rounded-full bg-primary px-8 py-2 text-sm font-bold text-primary-foreground shadow-sm hover:bg-primary/90 transition-all">Follow</a>
+                                @endauth
                                 <button class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">Contact</button>
                             </div>
                         </div>

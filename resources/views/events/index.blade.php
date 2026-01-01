@@ -94,7 +94,14 @@
                             @forelse($events as $event)
                                 <tr class="border-b border-border hover:bg-muted/50 transition-colors">
                                     <td class="p-4 align-middle">
-                                        <div class="font-medium">{{ $event->title }}</div>
+                                        <div class="font-medium flex items-center gap-2">
+                                            {{ $event->title }}
+                                            @if($event->is_promoted)
+                                                <div class="flex items-center justify-center size-6 rounded-full bg-green-100 text-green-600" title="Promoted">
+                                                    <span class="icon-[tabler--currency-dollar] size-4"></span>
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div class="text-xs text-muted-foreground max-w-[200px] truncate">{{ $event->description }}</div>
                                     </td>
                                     <td class="p-4 align-middle">

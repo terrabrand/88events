@@ -19,8 +19,29 @@ class HomeController extends Controller
         
         $latestEvents = Event::where('status', 'published')
             ->with(['venue', 'ticketTypes'])
-            ->withPromotionStatus()
-            ->orderByDesc('is_promoted')
+            ->withPromotionStatus() // Adds is_promoted column (0 or 1)
+            ->when($request->user(), function($query) {
+                $followedIds = $query->getModel()->newQuery()
+                    ->select('follows.followed_id')
+                    ->from('follows')
+                    ->where('follower_id', auth()->id());
+                
+                // Sort by: is_promoted DESC (handled below), then is_followed DESC
+                // We use a subquery for is_followed_organizer to be safe with large ID lists
+                $query->addSelect(['is_followed_organizer' => function($q) use ($followedIds) {
+                     $q->selectRaw('1')
+                       ->from('follows')
+                       ->whereColumn('follows.followed_id', 'events.organizer_id')
+                       ->where('follows.follower_id', auth()->id())
+                       ->limit(1);
+                }]);
+                
+                // We must apply explicit orders here to ensure sequence
+                $query->orderByDesc('is_promoted')
+                      ->orderByRaw('COALESCE(is_followed_organizer, 0) DESC');
+            }, function($query) {
+                $query->orderByDesc('is_promoted');
+            })
             ->latest()
             ->take(8)
             ->get();

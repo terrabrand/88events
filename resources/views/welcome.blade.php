@@ -170,10 +170,12 @@
                                     @php $minPrice = $event->ticketTypes->min('price'); @endphp
                                     {{ $minPrice > 0 ? 'From $' . number_format($minPrice, 2) : 'Free' }}
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[11px] text-muted-foreground">Promoted</span>
-                                    <span class="icon-[lucide--info] size-3 text-muted-foreground"></span>
-                                </div>
+                                @if($event->is_promoted)
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[11px] text-muted-foreground font-semibold">Promoted</span>
+                                        <span class="icon-[lucide--info] size-3 text-muted-foreground"></span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

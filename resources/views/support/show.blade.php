@@ -57,7 +57,7 @@
             @if($ticket->status !== 'closed')
                 <div class="bg-card border rounded-2xl p-6 shadow-sm border-t-4 border-t-primary/30">
                     <h3 class="font-bold text-[#1E0A3C] mb-4">Post a Reply</h3>
-                    <form action="{{ route('support.reply', $ticket) }}" method="POST" class="space-y-4">
+                    <form action="{{ route('support.reply', ['ticket' => $ticket->id]) }}" method="POST" class="space-y-4">
                         @csrf
                         <textarea name="message" class="textarea textarea-bordered rounded-xl w-full h-32 focus:border-primary" placeholder="Type your message here..." required></textarea>
                         <div class="flex justify-end">

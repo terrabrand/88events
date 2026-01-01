@@ -50,7 +50,7 @@
         </div>
 
         <!-- Deposit Card -->
-        <div x-data="{ amount: '' }" class="card bg-card border border-border/50 lg:col-span-2 shadow-xl shadow-black/5 hover:border-primary/20 transition-colors">
+        <div x-data="{ amount: '', gateway: 'manual' }" class="card bg-card border border-border/50 lg:col-span-2 shadow-xl shadow-black/5 hover:border-primary/20 transition-colors">
             <div class="card-header border-b border-border/50 p-6">
                 <div class="flex items-center gap-3">
                     <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
@@ -64,7 +64,9 @@
             </div>
 
             <div class="card-body p-8 space-y-8">
-                <form action="{{ route('organizer.credits.deposit') }}" method="POST">
+                <form action="{{ route('organizer.credits.deposit') }}" method="POST" x-data="{ 
+                    gateway: 'manual' 
+                }">
                     @csrf
                     
                     <div class="space-y-6">
@@ -101,15 +103,68 @@
                                 @endforeach
                             </div>
                         </div>
+
+                        <!-- Gateway Selection -->
+                        <div>
+                            <label class="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-3 block">Select Payment Method</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <!-- Manual / Crypto -->
+                                <label class="cursor-pointer relative">
+                                    <input type="radio" name="gateway" value="manual" x-model="gateway" class="peer sr-only">
+                                    <div class="h-full p-4 rounded-xl border-2 border-border/50 bg-card hover:border-primary/50 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 text-center group">
+                                        <div class="size-10 rounded-full bg-muted group-hover:bg-primary/10 peer-checked:bg-primary/20 flex items-center justify-center transition-colors">
+                                            <span class="icon-[tabler--building-bank] size-5 text-muted-foreground group-hover:text-primary peer-checked:text-primary transition-colors"></span>
+                                        </div>
+                                        <span class="font-bold text-sm">Bank / Crypto</span>
+                                    </div>
+                                    <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                                        <span class="icon-[tabler--circle-check-filled] size-5 text-primary"></span>
+                                    </div>
+                                </label>
+
+                                <!-- Stripe (Mock) -->
+                                <label class="cursor-pointer relative opacity-60">
+                                    <input type="radio" name="gateway" value="stripe" class="peer sr-only" disabled>
+                                    <div class="h-full p-4 rounded-xl border-2 border-border/50 bg-card hover:border-primary/50 transition-all flex flex-col items-center gap-2 text-center">
+                                        <div class="size-10 rounded-full bg-muted flex items-center justify-center">
+                                            <span class="icon-[tabler--brand-stripe] size-5 text-muted-foreground"></span>
+                                        </div>
+                                        <span class="font-bold text-sm">Stripe (Soon)</span>
+                                    </div>
+                                </label>
+
+                                <!-- PayPal (Mock) -->
+                                <label class="cursor-pointer relative opacity-60">
+                                    <input type="radio" name="gateway" value="paypal" class="peer sr-only" disabled>
+                                    <div class="h-full p-4 rounded-xl border-2 border-border/50 bg-card hover:border-primary/50 transition-all flex flex-col items-center gap-2 text-center">
+                                        <div class="size-10 rounded-full bg-muted flex items-center justify-center">
+                                            <span class="icon-[tabler--brand-paypal] size-5 text-muted-foreground"></span>
+                                        </div>
+                                        <span class="font-bold text-sm">PayPal (Soon)</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Manual Instructions Preview -->
+                        <div x-show="gateway === 'manual'" x-transition class="rounded-xl bg-blue-500/10 border border-blue-500/20 p-4 text-sm mt-4">
+                            <h4 class="font-bold text-blue-500 flex items-center gap-2 mb-2">
+                                <span class="icon-[tabler--info-circle] size-4"></span>
+                                Instructions
+                            </h4>
+                            <p class="text-muted-foreground">
+                                For manual payments (Bank Transfer to <b>{{ \App\Models\Setting::get('bank_account_details', 'Not Configured') }}</b> or Crypto), please proceed. You will be redirected to create a support ticket to attach your proof of payment.
+                            </p>
+                        </div>
                     </div>
 
                     <div class="mt-8 pt-6 border-t border-border/50 flex items-center justify-between">
                         <div class="text-sm text-muted-foreground">
                             <span class="icon-[tabler--lock] inline-block -mt-0.5 size-4"></span>
-                            Secure processing via Stripe
+                            Secure Processing
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg px-8 shadow-xl shadow-primary/20 font-bold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]">
-                            <span>Proceed to Payment</span>
+                        <button type="submit" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">
+                            <span>Proceed</span>
                             <span class="icon-[tabler--arrow-right] size-5"></span>
                         </button>
                     </div>

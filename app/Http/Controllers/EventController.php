@@ -26,7 +26,10 @@ class EventController extends Controller
                 ->orderBy('start_date', 'asc')
                 ->paginate(12);
         } else {
-            $events = Event::where('organizer_id', Auth::id())->latest()->paginate(10);
+            $events = Event::where('organizer_id', Auth::id())
+                ->withPromotionStatus()
+                ->latest()
+                ->paginate(10);
         }
         
         return view('events.index', compact('events'));
@@ -55,6 +58,25 @@ class EventController extends Controller
         $validated['organizer_id'] = Auth::id();
         $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(6);
 
+        // Handle Venue Logic
+        if ($request->filled('venue_google_place_id')) {
+            $venue = Venue::firstOrCreate(
+                ['google_place_id' => $request->input('venue_google_place_id')],
+                [
+                    'name' => $request->input('venue_name') ?? $request->input('venue_address'),
+                    'address' => $request->input('venue_address'),
+                    'city' => $request->input('venue_city'),
+                    'state' => $request->input('venue_state'),
+                    'country' => $request->input('venue_country'),
+                    'lat' => $request->input('venue_lat'),
+                    'lng' => $request->input('venue_lng'),
+                    'organizer_id' => Auth::id(),
+                    'is_global' => false,
+                ]
+            );
+            $validated['venue_id'] = $venue->id;
+        }
+
         if ($request->hasFile('cover_image')) {
             $path = $request->file('cover_image')->store('covers', 'public');
             $validated['cover_image_path'] = $path;
@@ -76,6 +98,7 @@ class EventController extends Controller
     public function showPublic(Event $event)
     {
         $event->load(['venue', 'ticketTypes', 'organizer']);
+        $event->organizer->loadCount('followers');
         
         if ($event->status !== 'published') {
             abort(404);
@@ -105,6 +128,25 @@ class EventController extends Controller
         $this->authorize('update', $event);
         $validated = $request->validated();
         
+        // Handle Venue Logic
+        if ($request->filled('venue_google_place_id')) {
+            $venue = Venue::firstOrCreate(
+                ['google_place_id' => $request->input('venue_google_place_id')],
+                [
+                    'name' => $request->input('venue_name') ?? $request->input('venue_address'),
+                    'address' => $request->input('venue_address'),
+                    'city' => $request->input('venue_city'),
+                    'state' => $request->input('venue_state'),
+                    'country' => $request->input('venue_country'),
+                    'lat' => $request->input('venue_lat'),
+                    'lng' => $request->input('venue_lng'),
+                    'organizer_id' => Auth::id(),
+                    'is_global' => false,
+                ]
+            );
+            $validated['venue_id'] = $venue->id;
+        }
+
         if ($request->hasFile('cover_image')) {
             $path = $request->file('cover_image')->store('covers', 'public');
             $validated['cover_image_path'] = $path;

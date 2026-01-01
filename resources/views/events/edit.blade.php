@@ -81,6 +81,15 @@
                         <label class="text-sm font-medium leading-none" for="venue_address">Venue Address (Physical/Hybrid)</label>
                         <input type="text" name="venue_address" id="venue_address" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" value="{{ old('venue_address', $event->venue_address) }}">
                         @error('venue_address') <span class="text-sm font-medium text-destructive">{{ $message }}</span> @enderror
+                        
+                        <!-- Hidden Location Fields -->
+                        <input type="hidden" name="venue_name" id="venue_name" value="{{ $event->venue ? $event->venue->name : '' }}">
+                        <input type="hidden" name="venue_city" id="venue_city" value="{{ $event->venue ? $event->venue->city : '' }}">
+                        <input type="hidden" name="venue_state" id="venue_state" value="{{ $event->venue ? $event->venue->state : '' }}">
+                        <input type="hidden" name="venue_country" id="venue_country" value="{{ $event->venue ? $event->venue->country : '' }}">
+                        <input type="hidden" name="venue_lat" id="venue_lat" value="{{ $event->venue ? $event->venue->lat : '' }}">
+                        <input type="hidden" name="venue_lng" id="venue_lng" value="{{ $event->venue ? $event->venue->lng : '' }}">
+                        <input type="hidden" name="venue_google_place_id" id="venue_google_place_id" value="{{ $event->venue ? $event->venue->google_place_id : '' }}">
                     </div>
 
                     <div class="space-y-2">
@@ -401,6 +410,16 @@
 
 @push('scripts')
 <script>
+    // Debug Google Maps Loading
+    function checkGoogleMapsLoaded() {
+        if (typeof google === 'object' && typeof google.maps === 'object') {
+            console.log('Google Maps API loaded successfully');
+            initAutocomplete();
+        } else {
+            console.error('Google Maps API not loaded. Check your API key and network.');
+        }
+    }
+
     document.getElementById('allow_promoters').addEventListener('change', function() {
         document.getElementById('promoter_options').classList.toggle('hidden', !this.checked);
     });
@@ -415,6 +434,56 @@
             document.getElementById('has_seat_mapping').checked = false;
         }
     });
+
+    // Google Places Autocomplete
+    function initAutocomplete() {
+        const input = document.getElementById('venue_address');
+        if (!input) {
+            console.error('Venue address input not found');
+            return;
+        }
+
+        const autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+                console.warn('No details available for input: ' + place.name);
+                return;
+            }
+
+            document.getElementById('venue_name').value = place.name;
+            document.getElementById('venue_lat').value = place.geometry.location.lat();
+            document.getElementById('venue_lng').value = place.geometry.location.lng();
+            document.getElementById('venue_google_place_id').value = place.place_id;
+
+            let addressComponents = place.address_components;
+            let city = '';
+            let state = '';
+            let country = '';
+
+            for (let i = 0; i < addressComponents.length; i++) {
+                const types = addressComponents[i].types;
+                if (types.includes('locality')) {
+                    city = addressComponents[i].long_name;
+                }
+                if (types.includes('administrative_area_level_1')) {
+                    state = addressComponents[i].long_name;
+                }
+                if (types.includes('country')) {
+                    country = addressComponents[i].long_name;
+                }
+            }
+
+            document.getElementById('venue_city').value = city;
+            document.getElementById('venue_state').value = state;
+            document.getElementById('venue_country').value = country;
+            
+            console.log('Venue details populated:', {name: place.name, city: city, state: state, country: country});
+        });
+    }
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=checkGoogleMapsLoaded" async defer></script>
+@endpush
 @endpush
 

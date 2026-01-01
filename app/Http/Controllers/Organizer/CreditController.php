@@ -20,12 +20,23 @@ class CreditController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:1',
+            'gateway' => 'required|in:manual,stripe,paypal',
         ]);
 
-        // Mock payment gateway logic
-        $user = auth()->user();
-        $user->depositCredits($request->amount, 'Manual Deposit');
+        if ($request->gateway === 'manual') {
+            // Redirect to support ticket creation with pre-filled details
+            // Redirecting to the user-facing 'support.create' route
+            return redirect()->route('support.create', [ 
+                'subject' => "Payment Verification: \${$request->amount} Deposit",
+                'message' => "I have made a payment of \${$request->amount} via Bank Transfer/Crypto. Please verify and add credits to my account." . PHP_EOL . PHP_EOL . "Transaction Details:"
+            ]);
+        }
 
-        return back()->with('success', 'Credits added successfully!');
+        // Future integrations
+        if (in_array($request->gateway, ['stripe', 'paypal'])) {
+            return back()->with('error', 'Online payments are coming soon. Please use Manual / Bank Transfer for now.');
+        }
+
+        return back();
     }
 }

@@ -12,6 +12,12 @@ class Venue extends Model
     protected $fillable = [
         'name',
         'address',
+        'city',
+        'state',
+        'country',
+        'lat',
+        'lng',
+        'google_place_id',
         'capacity',
         'seat_map_image',
         'is_global',

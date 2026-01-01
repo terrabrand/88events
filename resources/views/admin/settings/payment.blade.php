@@ -133,6 +133,78 @@
                 </div>
             </div>
 
+            <!-- Razorpay -->
+            <div class="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/20 hover:shadow-md">
+                <div class="flex items-center justify-between p-6 border-b border-border bg-muted/30">
+                    <div class="flex items-center gap-4">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="icon-[tabler--currency-rupee] size-6 text-primary"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Razorpay</h3>
+                            <div class="flex items-center gap-2">
+                                @if(\App\Models\Setting::get('razorpay_enabled') == '1')
+                                    <span class="badge badge-success badge-soft badge-xs font-bold uppercase">Active</span>
+                                @else
+                                    <span class="badge badge-error badge-soft badge-xs font-bold uppercase">Disabled</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="razorpay_enabled" value="1" {{ \App\Models\Setting::get('razorpay_enabled') == '1' ? 'checked' : '' }} class="toggle toggle-primary">
+                    </label>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase text-muted-foreground">Key ID</label>
+                        <input type="text" name="razorpay_key_id" value="{{ \App\Models\Setting::get('razorpay_key_id') }}" class="input input-bordered w-full font-mono text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase text-muted-foreground">Key Secret</label>
+                        <input type="password" name="razorpay_key_secret" value="{{ \App\Models\Setting::get('razorpay_key_secret') }}" class="input input-bordered w-full font-mono text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flutterwave -->
+            <div class="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/20 hover:shadow-md">
+                <div class="flex items-center justify-between p-6 border-b border-border bg-muted/30">
+                    <div class="flex items-center gap-4">
+                        <div class="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                            <span class="icon-[tabler--activity] size-6 text-primary"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">Flutterwave</h3>
+                            <div class="flex items-center gap-2">
+                                @if(\App\Models\Setting::get('flutterwave_enabled') == '1')
+                                    <span class="badge badge-success badge-soft badge-xs font-bold uppercase">Active</span>
+                                @else
+                                    <span class="badge badge-error badge-soft badge-xs font-bold uppercase">Disabled</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" name="flutterwave_enabled" value="1" {{ \App\Models\Setting::get('flutterwave_enabled') == '1' ? 'checked' : '' }} class="toggle toggle-primary">
+                    </label>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase text-muted-foreground">Public Key</label>
+                        <input type="text" name="flutterwave_public_key" value="{{ \App\Models\Setting::get('flutterwave_public_key') }}" class="input input-bordered w-full font-mono text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase text-muted-foreground">Secret Key</label>
+                        <input type="password" name="flutterwave_secret_key" value="{{ \App\Models\Setting::get('flutterwave_secret_key') }}" class="input input-bordered w-full font-mono text-sm">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-black uppercase text-muted-foreground">Encryption Key</label>
+                        <input type="password" name="flutterwave_encryption_key" value="{{ \App\Models\Setting::get('flutterwave_encryption_key') }}" class="input input-bordered w-full font-mono text-sm">
+                    </div>
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Bank Transfer -->
                 <div class="group relative overflow-hidden rounded-2xl border border-border bg-card transition-all hover:border-primary/20 hover:shadow-md">

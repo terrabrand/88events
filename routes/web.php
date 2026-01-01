@@ -7,8 +7,8 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('h
 Route::get('/search', [\App\Http\Controllers\SearchController::class, 'index'])->name('search');
 
 Route::get('/category/{category:slug}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
-Route::get('/event/{event:slug}', [\App\Http\Controllers\EventController::class, 'showPublic'])->name('events.show.public');
-Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'showPublic'])->name('events.show');
+Route::get('/category/{category:slug}', [\App\Http\Controllers\CategoryController::class, 'show'])->name('categories.show');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
@@ -49,13 +49,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/scanner/check', [\App\Http\Controllers\Api\CheckInController::class, 'store'])->name('scanner.check');
     });
 
+    // User Support Tickets
+    Route::resource('support', \App\Http\Controllers\SupportTicketController::class);
+    Route::post('support/{ticket}/reply', [\App\Http\Controllers\SupportTicketController::class, 'reply'])->name('support.reply');
+
     // Admin Routes
     // Support Ticket System
-    Route::get('support', [\App\Http\Controllers\SupportTicketController::class, 'index'])->name('support.index');
-    Route::get('support/create', [\App\Http\Controllers\SupportTicketController::class, 'create'])->name('support.create');
-    Route::post('support', [\App\Http\Controllers\SupportTicketController::class, 'store'])->name('support.store');
-    Route::get('support/{ticket}', [\App\Http\Controllers\SupportTicketController::class, 'show'])->name('support.show');
-    Route::post('support/{ticket}/reply', [\App\Http\Controllers\SupportTicketController::class, 'reply'])->name('support.reply');
+    // The following routes are now covered by the resource route above, except for the reply route.
+    // Route::get('support', [\App\Http\Controllers\SupportTicketController::class, 'index'])->name('support.index');
+    // Route::get('support/create', [\App\Http\Controllers\SupportTicketController::class, 'create'])->name('support.create');
+    // Route::post('support', [\App\Http\Controllers\SupportTicketController::class, 'store'])->name('support.store');
+    // Route::get('support/{ticket}', [\App\Http\Controllers\SupportTicketController::class, 'show'])->name('support.show');
+    // Route::post('support/{ticket}/reply', [\App\Http\Controllers\SupportTicketController::class, 'reply'])->name('support.reply');
 
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
@@ -90,7 +95,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/support', [\App\Http\Controllers\Admin\SupportTicketController::class, 'index'])->name('support.index');
         Route::get('/support/{ticket}', [\App\Http\Controllers\Admin\SupportTicketController::class, 'show'])->name('support.show');
         Route::patch('/support/{ticket}/status', [\App\Http\Controllers\Admin\SupportTicketController::class, 'updateStatus'])->name('support.status');
-        Route::post('/support/{ticket}/reply', [\App\Http\Controllers\Admin\SupportTicketController::class, 'reply'])->name('support.reply');
+        Route::post('/support/{ticket}/reply', [\App\Http\Controllers\Admin\SupportTicketController::class, 'reply'])->name('admin.support.reply');
 
         Route::resource('venues', \App\Http\Controllers\Admin\VenueController::class);
 
@@ -98,6 +103,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('ad-packages', \App\Http\Controllers\Admin\AdPackageController::class)->except(['show', 'create', 'edit']);
         Route::get('promotions', [\App\Http\Controllers\Admin\PromotionController::class, 'index'])->name('promotions.index');
         Route::patch('promotions/{promotion}/status', [\App\Http\Controllers\Admin\PromotionController::class, 'updateStatus'])->name('promotions.status');
+        
+        // Manual Credits
+        Route::get('credits/add', [\App\Http\Controllers\Admin\CreditController::class, 'create'])->name('credits.create');
+        Route::post('credits/add', [\App\Http\Controllers\Admin\CreditController::class, 'store'])->name('credits.store');
     });
 
     // Organizer Routes
@@ -141,3 +150,30 @@ Route::get('auth/{provider}/redirect', [App\Http\Controllers\Auth\SocialiteContr
 Route::get('auth/{provider}/callback', [App\Http\Controllers\Auth\SocialiteController::class, 'handleProviderCallback'])->name('social.callback');
 
 // Search Route
+
+Route::get('/event/{event:slug}', [\App\Http\Controllers\EventController::class, 'showPublic'])->name('events.show.public');
+Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'showPublic'])->name('events.show');
+
+// Organizer Profile & Follow System
+Route::get('/organizers/{organizer}', [\App\Http\Controllers\OrganizerProfileController::class, 'show'])->name('organizers.show');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/organizers/{organizer}/follow', [\App\Http\Controllers\FollowController::class, 'store'])->name('organizers.follow');
+    Route::delete('/organizers/{organizer}/follow', [\App\Http\Controllers\FollowController::class, 'destroy'])->name('organizers.unfollow');
+    
+    // Profile Routes
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [\App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Static Pages
+Route::get('/pricing', [\App\Http\Controllers\PageController::class, 'pricing'])->name('pages.pricing');
+Route::get('/about', [\App\Http\Controllers\PageController::class, 'about'])->name('pages.about');
+Route::get('/careers', [\App\Http\Controllers\PageController::class, 'careers'])->name('pages.careers');
+Route::get('/press', [\App\Http\Controllers\PageController::class, 'press'])->name('pages.press');
+Route::get('/security', [\App\Http\Controllers\PageController::class, 'security'])->name('pages.security');
+Route::get('/developers', [\App\Http\Controllers\PageController::class, 'developers'])->name('pages.developers');
+Route::get('/terms', [\App\Http\Controllers\PageController::class, 'terms'])->name('pages.terms');
+Route::get('/privacy', [\App\Http\Controllers\PageController::class, 'privacy'])->name('pages.privacy');
+Route::get('/cookies', [\App\Http\Controllers\PageController::class, 'cookies'])->name('pages.cookies');
