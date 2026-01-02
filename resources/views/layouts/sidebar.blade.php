@@ -159,6 +159,16 @@
                             Support Tickets
                         </a>
 
+                        <a href="{{ route('admin.support.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.support.index') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                            <span class="icon-[lucide--life-buoy] size-5"></span>
+                            Support Tickets
+                        </a>
+
+                        <a href="{{ route('admin.posts.index') }}" @class(['flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground', request()->routeIs('admin.posts.*') ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:bg-accent'])>
+                            <span class="icon-[lucide--file-text] size-5"></span>
+                            Blog Posts
+                        </a>
+
                         <!-- Settings Submenu -->
                         <div x-data="{ open: {{ request()->routeIs('admin.settings.*') ? 'true' : 'false' }} }">
                             <button @click="open = !open" class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">

@@ -141,6 +141,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('credits', [\App\Http\Controllers\Organizer\CreditController::class, 'index'])->name('credits.index');
         Route::post('credits/deposit', [\App\Http\Controllers\Organizer\CreditController::class, 'deposit'])->name('credits.deposit');
     });
+
+    // Admin Blog Management
+    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('posts/models', [\App\Http\Controllers\Admin\PostController::class, 'models'])->name('posts.models');
+        Route::post('posts/generate', [\App\Http\Controllers\Admin\PostController::class, 'generate'])->name('posts.generate');
+        Route::post('posts/generate-image', [\App\Http\Controllers\Admin\PostController::class, 'generateImage'])->name('posts.generate-image');
+        Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
+    });
 });
 
 require __DIR__.'/auth.php';
@@ -177,3 +185,7 @@ Route::get('/developers', [\App\Http\Controllers\PageController::class, 'develop
 Route::get('/terms', [\App\Http\Controllers\PageController::class, 'terms'])->name('pages.terms');
 Route::get('/privacy', [\App\Http\Controllers\PageController::class, 'privacy'])->name('pages.privacy');
 Route::get('/cookies', [\App\Http\Controllers\PageController::class, 'cookies'])->name('pages.cookies');
+
+// Blog Routes
+Route::get('/blog', [\App\Http\Controllers\PostController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [\App\Http\Controllers\PostController::class, 'show'])->name('blog.show');

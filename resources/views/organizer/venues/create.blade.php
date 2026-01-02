@@ -43,8 +43,8 @@
         </div>
 
         <div class="flex justify-end gap-3">
-            <a href="{{ route('organizer.venues.index') }}" class="btn btn-ghost px-8">Cancel</a>
-            <button type="submit" class="btn btn-primary px-10 shadow-xl shadow-primary/30">Create Venue</button>
+            <a href="{{ route('organizer.venues.index') }}" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">Cancel</a>
+            <button type="submit" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">Create Venue</button>
         </div>
     </form>
 </div>

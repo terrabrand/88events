@@ -7,7 +7,7 @@
             <h2 class="text-3xl font-bold tracking-tight text-foreground">Event Management</h2>
             <p class="text-muted-foreground mt-1">Manage your events and guest pools from one place.</p>
         </div>
-        <button class="btn btn-primary gap-2 h-11" onclick="window.add_guest_modal.showModal()">
+        <button class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all" onclick="window.add_guest_modal.showModal()">
             <span class="icon-[tabler--user-plus] size-5"></span>
             Add Global Guest
         </button>
@@ -139,7 +139,7 @@
                 </div>
 
                 <div class="modal-action gap-3 mt-8">
-                    <button type="button" onclick="window.invite_to_event_modal.close()" class="btn btn-ghost hover:bg-muted text-muted-foreground hover:text-foreground flex-1">
+                    <button type="button" onclick="window.invite_to_event_modal.close()" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">
                         Cancel
                     </button>
                     <button type="submit" class="btn btn-primary text-primary-foreground flex-1 shadow-lg shadow-primary/20 font-bold" @if($events->isEmpty()) disabled @endif>
@@ -192,10 +192,10 @@
                 </div>
                 
                 <div class="modal-action gap-3 mt-8">
-                    <button type="button" onclick="window.add_guest_modal.close()" class="btn btn-ghost hover:bg-muted text-muted-foreground hover:text-foreground flex-1">
+                    <button type="button" onclick="window.add_guest_modal.close()" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">
                         Cancel
                     </button>
-                    <button type="submit" class="btn btn-primary text-primary-foreground flex-1 shadow-lg shadow-primary/20 font-bold">
+                    <button type="submit" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">
                         Add to Pool
                     </button>
                 </div>

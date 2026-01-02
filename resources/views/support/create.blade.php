@@ -80,8 +80,8 @@
                 </div>
 
                 <div class="pt-4 flex justify-end gap-3">
-                    <a href="{{ route('support.index') }}" class="btn btn-ghost">Cancel</a>
-                    <button type="submit" class="btn btn-primary font-bold shadow-lg shadow-primary/20">
+                    <a href="{{ route('support.index') }}" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">Cancel</a>
+                    <button type="submit" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">
                         <span class="icon-[tabler--send] mr-2 size-5"></span>
                         Submit Ticket
                     </button>

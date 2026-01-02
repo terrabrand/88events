@@ -24,6 +24,7 @@
 
         <div class="flex items-center gap-4">
             <div class="hidden xl:flex items-center gap-5 mr-2">
+                <a href="{{ route('blog.index') }}" class="text-xs font-bold hover:text-primary transition-colors">Blog</a>
                 <a href="{{ route('search') }}" class="text-xs font-bold hover:text-primary transition-colors">Find Events</a>
                 <a href="{{ route('events.create') }}" class="text-xs font-bold hover:text-primary transition-colors">Create Events</a>
                 <div class="relative" x-data="{ open: false }">

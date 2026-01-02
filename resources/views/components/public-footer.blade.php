@@ -6,6 +6,7 @@
                 <ul class="space-y-4 text-muted-foreground">
                     <li><a href="{{ route('events.create') }}" class="hover:text-primary transition-colors">Create Events</a></li>
                     <li><a href="{{ route('pages.pricing') }}" class="hover:text-primary transition-colors">Pricing</a></li>
+                    <li><a href="{{ route('blog.index') }}" class="hover:text-primary transition-colors">Blog</a></li>
                     <li><a href="#" class="hover:text-primary transition-colors">Content Guidelines</a></li>
                     <li><a href="#" class="hover:text-primary transition-colors">FAQs</a></li>
                     <li><a href="#" class="hover:text-primary transition-colors">Sitemap</a></li>

@@ -53,7 +53,7 @@ class PromotionController extends Controller
                     'ad_package_id' => $package->id,
                     'start_date' => $validated['start_date'],
                     'end_date' => \Carbon\Carbon::parse($validated['start_date'])->addDays($package->duration_days),
-                    'status' => 'pending', // Or active depending on settings
+                    'status' => 'active',
                     'cost' => $cost,
                     'payment_method' => 'credit',
                 ]);

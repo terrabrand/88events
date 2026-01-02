@@ -7,7 +7,7 @@
             <h2 class="text-3xl font-bold tracking-tight text-foreground">Venues</h2>
             <p class="text-sm text-muted-foreground">Manage your private venues or browse global ones.</p>
         </div>
-        <a href="{{ route('organizer.venues.create') }}" class="btn btn-primary">
+        <a href="{{ route('organizer.venues.create') }}" class="rounded-full border border-input bg-background px-8 py-2 text-sm font-bold text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground transition-all">
             <span class="icon-[lucide--plus] size-5"></span>
             Add Private Venue
         </a>
